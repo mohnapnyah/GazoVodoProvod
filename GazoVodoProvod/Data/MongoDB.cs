@@ -18,8 +18,7 @@ namespace GazoVodoProvod.Data
             UserDatabase = client.GetDatabase("GazVodPraktika");
             UsersCollection = UserDatabase.GetCollection<User>("Users");
             ProjectsCollection = UserDatabase.GetCollection<Project>("Projects");
-            VodDocCollection = UserDatabase.GetCollection<VodDoc>("VodDoc");
-            GazDocCollection = UserDatabase.GetCollection<GazDoc>("GazDoc");
+           
         }
         #region User
         public static void AddToDBUser(User newUser)
@@ -77,5 +76,20 @@ namespace GazoVodoProvod.Data
             GazDocCollection.ReplaceOne(x => x.DesignerLogin == DesignerLogin, newGazDoc);
         }
         #endregion
+
+        public static List<User> FindAllCustomer()
+        {
+            return UsersCollection.Find(x => x is Customer).ToList();
+        }
+
+        public static List<User> FindAllDeveloper()
+        {
+            return UsersCollection.Find(x => x is Builder).ToList();
+        }
+
+        public static List<User> FindAllDesigner()
+        {
+            return UsersCollection.Find(x => x is Designer).ToList();
+        }
     }
 }

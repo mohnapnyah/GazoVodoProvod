@@ -1,0 +1,127 @@
+﻿@page "/edit_project"
+@using GazoVodoProvod.Data;
+@using System.Reflection
+@using MongoDB.Bson;
+@inject NavigationManager NavigationManager
+@inject SingletonService singleton
+
+
+<h3>EditProject</h3>
+<lable>@error</lable>
+@if (currentUser is Customer)
+{
+    <label>Designer</label>
+    <select @bind="@des">
+        @foreach(var i in MongoDb.FindAllDesigner())
+        {
+            <option value="@i.Login">@((i as Designer).FName)</option>
+        }
+    </select><br />
+    <label>Developer</label>
+    <select @bind="@dev">
+        @foreach (var i in MongoDb.FindAllDeveloper())
+        {
+            <option value="@i.Login">@((i as Builder).FName)</option>
+        }
+    </select>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>File</th>
+                <th>Approved</th>
+                <th>NEApproved</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in singleton.GetProject().Documents)
+            {
+                <tr>
+                    <td>@i.Type.Title</td>@*
+                    <td>@DocumentDB.FindFile(i.FileId)</td>
+                    <td><a href='file/{@DocumentDB.FindFile(i.FileId)}'>@i.FileId</a></td>*@
+                    <td>@i.FileId</td>
+                    <td><button></button></td>
+                    <td><button></button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>File</th>
+                <th>Approved</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in singleton.GetProject().Documents)
+            {
+                if (i.Type.Role.ToString().Equals(singleton.GetUser().GetType().Name))
+                {
+                    <tr>
+                        <td>@i.Type.Title</td>
+                        <td>
+                            <InputFile OnChange="@LoadFiles"/>
+                            @*<input type="file" @bind-value="@file">*@
+                        </td>
+                        <button class="btn btn-primary" @onclick="@(() => SaveDocument(i))">Send</button>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    @file
+}
+
+@code {
+    private User currentUser;
+    private string file = string.Empty;
+    private string dev;
+    private string des;
+    private string error;
+    private ObjectId fileId;
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            if (file != string.Empty)
+            {
+                error = "Save lasd document";
+                return;
+            }
+            file = e.File.Name;
+            var path = Path.GetFullPath($"wwwroot\\Fiels\\{file}");
+            using (FileStream fs = new(path, FileMode.Create))
+            {
+                await e.File.OpenReadStream(1000000000).CopyToAsync(fs);
+            }
+            fileId = DocumentDB.AddFileToDataBase(path, file);
+            //file = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            error = $"{ex.Message}";
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = singleton.GetUser();
+    }
+
+    private void SaveDocument(Document document)
+    {
+        document.FileId = fileId.ToString();
+        DocumentDB.AddDocumentToDataBase(document);
+        ProjectDB.ReplaceProject(singleton.GetProject().Name, singleton.GetProject());
+        file = string.Empty;
+
+    }
+}

@@ -74,6 +74,7 @@
 	private string Phone = "";
 	private string Message = "";
 	private string KindOfUser = "";
+	private string ogrn = "";
 	private void CreateCustomer()
 	{ KindOfUser = "Customer"; CreateUser(); }
 	private void CreateDesigner()
@@ -92,19 +93,30 @@
 					User user = new User(Login, Password, FName, LName, Patronymic, Phone, Email);
 					switch (KindOfUser)
 					{
-						case ("Customer"):
+						case ("Builder"):
 							user = new Builder(Login, Password, FName, LName, Patronymic, Phone, Email, "", "", "", "", "");
 							break;
 						case ("Designer"):
 							user = new Designer(Login, Password, FName, LName, Patronymic, Phone, Email, "", "", "", "", "", "");
 							break;
-						case ("Builder"):
+						case ("Customer"):
 							user = new Customer(Login, Password, FName, LName, Patronymic, Phone, Email, "", "");
 							break;
 					}
 					MongoDb.AddToDBUser(user);
 					singleton.SetUser(user);
-					navManager.NavigateTo("mainpage");
+					switch (KindOfUser)
+					{
+						case("Builder"):
+							navManager.NavigateTo("BuilderPage");
+							break;
+						case("Designer"):
+							navManager.NavigateTo("DesignerPage");
+							break;
+						case("Customer"):
+							navManager.NavigateTo("CustomerPage");
+							break;
+					}
 				}
 				else
 				{

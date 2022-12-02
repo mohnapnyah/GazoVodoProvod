@@ -5,9 +5,9 @@ namespace GazoVodoProvod.Data
 {
     public class Designer : User
     {
-        private string Ogrn = "da";
-        private string Inn = "da";
-        private string Kpp = "da";
+        private string Ogrn = "";
+        private string Inn = "";
+        private string Kpp = "";
         private string adress;
         private string director;
         private string chiefProjectEngineer;

@@ -7,7 +7,9 @@ namespace GazoVodoProvod.Data
     {
         private string department;
         private string post;
-        public Customer(string login, string password, string lName, string fName, string patronymic, string phone, string email, string department, string post) : base(login, password, lName, fName, patronymic, phone, email)
+        
+        public Customer(string login, string password, string lName, string fName, string patronymic, string phone, string email, string department, string post) :
+            base(login, password, lName, fName, patronymic, phone, email)
         {
             Department = department;
             Post = post;

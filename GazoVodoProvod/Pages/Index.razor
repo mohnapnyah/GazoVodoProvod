@@ -33,10 +33,10 @@
 	private string Password = "";
 	public void LogIn()
 	{
-		navManager.NavigateTo("Profile");
 		if (Login != "")
 		{
 			User autoUser = MongoDb.FindUser(Login);
+
 			if (autoUser != null)
 			{
 				if (autoUser.Password == Password)
@@ -44,10 +44,13 @@
 					switch (autoUser.GetType().Name)
 					{
 						case("Customer"):
-							navManager.NavigateTo("customerPage");
+							navManager.NavigateTo("CustomerPage");
 							break;
-						default: 
-							navManager.NavigateTo("personalAccount");
+						case("Builder"):
+							navManager.NavigateTo("BuilderPage");
+							break;
+						case("Designer"):
+							navManager.NavigateTo("DesignerPage");
 							break;
 					}
 					

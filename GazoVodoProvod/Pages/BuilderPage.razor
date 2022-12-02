@@ -1,0 +1,69 @@
+﻿@page "/BuilderPage"
+@using GazoVodoProvod.Data
+<h3>BuilderPage</h3>
+@inject NavigationManager navManager
+@inject SingletonService singleton;
+
+<p>
+		Login
+		<input type="text" readonly value="@singleton.GetUser().Login">
+	</p>		
+	<p>
+		Email
+		<input type="text" readonly value="@singleton.GetUser().Email"> 
+	</p>
+	<p>
+		FName
+		<input type="text" readonly value="@singleton.GetUser().FName"> 
+	</p>
+	<p>
+		LName
+		<input type="text" readonly value="@singleton.GetUser().LName"> 
+	</p>
+	<p>
+		Patronymic
+		<input type="text" readonly value="@singleton.GetUser().Patronymic"> 
+	</p>
+	<p>
+		Phone
+		<input type="text" readonly value="@singleton.GetUser().Phone"> 
+	</p>
+	<p>
+		Address
+		<input type="text"  @bind-value="@Address"> 
+	</p>
+	<p>
+		OGRN
+		<input type="text"  maxlength="13"  @bind-value="@OGRN"> 
+	</p>
+<p>
+		INN
+		<input type="text" maxlength="10" @bind-value="@INN"> 
+	</p>
+	<p>
+		KPP
+		<input type="text" maxlength="9"  @bind-value="@KPP"> 
+	</p>
+	<p>
+		Director
+		<input type="text"  @bind-value="@Director"> 
+	</p>
+@code {
+	private string OGRN = "";
+	private string INN = "";
+	private string KPP = "";
+	private string Address = "";
+	private string Director = "";
+	Builder user;
+
+	private void Save()
+	{
+		user = (singleton.GetUser() as Builder );
+		user.OGRN = OGRN;
+		user.INN = INN;
+		user.KPP = KPP;
+		user.Adress = Address;
+		user.HeadExecutiveCommittee = Director;
+		MongoDb.ReplaceUser(user.Login, user);
+	}
+}

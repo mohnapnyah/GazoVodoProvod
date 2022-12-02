@@ -12,6 +12,20 @@ namespace GazoVodoProvod.Data
         private string patronymic;
         private string phone;
         private string email;
+        
+
+        public enum Industries
+        {
+            WaterSupply,
+            GasSupply
+        }
+
+        public enum Roles
+        {
+            Customer,
+            Designer,
+            Developer,
+        }
 
         public User(string login, string password, string lName, string fName, string patronymic, string phone, string email)
         {
@@ -22,6 +36,7 @@ namespace GazoVodoProvod.Data
             Patronymic = patronymic;
             Phone = phone;
             Email = email;
+           
         }
         [BsonId]
         [BsonIgnoreIfDefault]
@@ -33,5 +48,6 @@ namespace GazoVodoProvod.Data
         public string Patronymic { get { return patronymic; } set { patronymic = value; } }
         public string Phone { get { return phone; } set { phone = value; } }
         public string Email { get { return email; } set { email = value; } }
+
     }
 }
