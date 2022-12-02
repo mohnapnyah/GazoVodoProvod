@@ -1,8 +1,63 @@
-﻿@using GazoVodoProvod.Data;
+﻿@page "/CustomerPage"
+@using GazoVodoProvod.Data
+@using static GazoVodoProvod.Data.User
+@using System.Reflection
 @inject NavigationManager navManager
 @inject SingletonService singleton;
+
 <h3>CustomerPage</h3>
+<p>
+		Login
+		<input type="text" readonly value="@singleton.GetUser().Login">
+	</p>		
+	<p>
+		Email
+		<input type="text" readonly value="@singleton.GetUser().Email"> 
+	</p>
+	<p>
+		FName
+		<input type="text" readonly value="@singleton.GetUser().FName"> 
+	</p>
+	<p>
+		LName
+		<input type="text" readonly value="@singleton.GetUser().LName"> 
+	</p>
+	<p>
+		Patronymic
+		<input type="text" readonly value="@singleton.GetUser().Patronymic"> 
+	</p>
+	<p>
+		Phone
+		<input type="text" readonly value="@singleton.GetUser().Phone"> 
+	</p>
+	<p>
+		Department
+		<input type="text"  @bind-value="@department"> 
+	</p>
+	<p>
+		Post
+		<input type="text"  @bind-value="@post"> 
+	</p>
 
+	
+	
+<button class="btn btn-primary" onclick="@EditProject">Edit Project</button>
 @code {
+	private string department = "";
+	private string post = "";
+	Customer user;
 
+	private void Save()
+	{
+		user = (singleton.GetUser() as Customer );
+		user.Post = post;
+		user.Department = department;
+		MongoDb.ReplaceUser(user.Login, user);
+	}
+
+    private void EditProject()
+    {
+        navManager.NavigateTo("edit project");
+    }
+		
 }

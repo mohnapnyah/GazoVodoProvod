@@ -8,7 +8,7 @@
 
 <h3>EditProject</h3>
 <lable>@error</lable>
-@if (currentUser is Customer)
+@if (singleton.GetUser() is Customer)
 {
     <label>Designer</label>
     <select @bind="@des">
