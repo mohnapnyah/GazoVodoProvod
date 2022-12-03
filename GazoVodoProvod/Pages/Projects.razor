@@ -1,0 +1,41 @@
+﻿@using GazoVodoProvod.Data
+@inject SingletonService singleton
+@inject NavigationManager navManager
+@page "/Projects"
+<h3>Project</h3>
+@foreach (var i in UserProjects)
+    {
+        <div @onclick="@(() => SelectProject(i))">
+            <h4>@i.Name</h4>
+            <h5>Customer: @i.Customer.FName @i.Customer.LName</h5>
+            <h5> Designer: </h5>
+            @if (i.Designer != null) 
+            {
+                <h5> { i.Designer.Name; }</h5>
+            }
+            <h5> Builder: </h5>
+            @if (i.Builder != null)
+            {
+                <h5> { i.Builder.Name; }</h5>
+            }
+        </div>
+    }
+
+@code {
+     private List<Project> UserProjects;
+    private User currentUser;
+    private string newProjectName;
+
+     protected override async Task OnInitializedAsync()
+    {
+        currentUser = singleton.GetUser();
+        UserProjects = ProjectDB.FindAllProjectsByUser(currentUser);
+    }
+
+    private void SelectProject(Project project)
+    {
+        singleton.SetProject(project);
+        navManager.NavigateTo("EditProject");
+    }
+
+}

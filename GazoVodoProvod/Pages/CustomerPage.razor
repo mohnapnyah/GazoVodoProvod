@@ -1,11 +1,12 @@
 ﻿@page "/CustomerPage"
 @using GazoVodoProvod.Data
+
+<h3>CustomerPage</h3>
 @using static GazoVodoProvod.Data.User
-@using System.Reflection
 @inject NavigationManager navManager
 @inject SingletonService singleton;
 
-<h3>CustomerPage</h3>
+
 <p>
 		Login
 		<input type="text" readonly value="@singleton.GetUser().Login">
@@ -57,7 +58,7 @@
 
     private void EditProject()
     {
-        navManager.NavigateTo("edit project");
+        navManager.NavigateTo("EditProject");
     }
 		
 }

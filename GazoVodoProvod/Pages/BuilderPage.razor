@@ -48,6 +48,8 @@
 		Director
 		<input type="text"  @bind-value="@Director"> 
 	</p>
+	<button class="btn btn-primary" @onclick="Save">Save</button>
+	<button class="btn btn-primary" @onclick="ProjectsInfo">Projects</button>
 @code {
 	private string OGRN = "";
 	private string INN = "";
@@ -65,5 +67,10 @@
 		user.Adress = Address;
 		user.HeadExecutiveCommittee = Director;
 		MongoDb.ReplaceUser(user.Login, user);
+	}
+
+	private void ProjectsInfo()
+	{
+		navManager.NavigateTo("Projects");
 	}
 }
